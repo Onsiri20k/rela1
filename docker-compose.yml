@@ -1,0 +1,54 @@
+version: "3.7"
+services:
+  web:
+    container_name: gth_intern_com_web
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DEPLOY: dev
+      REGION: th
+      DOMAIN: test.gth.intern.com
+      TIME_ZONE: Asia/Bangkok
+      DEV_DB_HOST: mysql
+      DEV_DB_PORT: 3306
+      DEV_DB_USER: root
+      DEV_DB_PASSWORD: root
+      DEV_DB_NAME: gth_intern_com
+    links:
+      - redis:redis
+      - mysql:mysql
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/gth.intern.com
+    command: 'sh -c "sh /var/www/gth.intern.com/start-dev-web.sh"'
+    networks:
+      - development
+
+  redis:
+    container_name: gth_intern_com_redis
+    image: redis:alpine
+    ports:
+      - "6389:6379"
+    environment:
+      REDIS_PASSWORD: root
+    networks:
+      - development
+
+  mysql:
+    container_name: gth_intern_com_mysql
+    image: yobasystems/alpine-mariadb
+    ports:
+      - "6606:3306"
+    environment:
+      MYSQL_DATABASE: gth_intern_com
+      MYSQL_USER: ONSIRI
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - development
+
+networks:
+  development:
+    driver: "bridge"
