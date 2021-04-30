@@ -1,5 +1,37 @@
-
 import './App.css';
+import axios from 'axios';
+import React, { Component } from "react";
+import NoonList from './Noon-listing.component';
+
+export default class App extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.onChangeItemName = this.onChangeItemName.bind(this);
+    this.onChangeItemLocation = this.onChangeItemLocation.bind(this);
+    this.onChangeItemReview = this.onChangeItemReview.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+
+    this.state = {
+      name: '',
+      location: '',
+      review:''
+    }
+  }
+
+  onChangeItemName(e) {
+    this.setState({name: e.target.value})
+  }
+
+  onChangeItemLocation(e) {
+    this.setState({location: e.target.value})
+  }
+
+  onChangeItemReview(e) {
+    this.setState({review: e.target.value})
+  }
+}
 
 function App() {
   return (
@@ -21,7 +53,7 @@ function App() {
     <label for="lname">Description:</label>
     <input type="text" id="lname" name="lastname" placeholder="Enter your description .."></input>
 
-    <button class="button button1">Summit</button>
+    <button class="button button1">Submit</button>
     </form>
 
    

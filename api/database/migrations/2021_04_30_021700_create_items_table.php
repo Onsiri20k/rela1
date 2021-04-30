@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDatabase extends Migration
+class CreateItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class CreateDatabase extends Migration
      */
     public function up()
     {
-        Schema::create('database', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->text('name');
+            $table->text('location');
+            $table->text('review');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ class CreateDatabase extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('database');
+        Schema::dropIfExists('items');
     }
 }

@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ItemController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return "Test";
-});
+Route::resource('items',ItemController::class);
+

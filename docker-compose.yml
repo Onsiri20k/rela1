@@ -43,7 +43,7 @@ services:
       - "6606:3306"
     environment:
       MYSQL_DATABASE: gth_intern_com
-      MYSQL_USER: ONSIRI
+      MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
     networks:
