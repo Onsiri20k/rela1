@@ -1,98 +1,205 @@
 import './App.css';
 import axios from 'axios';
 import React, { Component } from "react";
-import NoonList from './Noon-listing.component';
 
-export default class App extends Component {
+class App extends Component {
 
-  constructor(props) {
-    super(props)
-
-    this.onChangeItemName = this.onChangeItemName.bind(this);
-    this.onChangeItemLocation = this.onChangeItemLocation.bind(this);
-    this.onChangeItemReview = this.onChangeItemReview.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+  constructor() {
+    super()
 
     this.state = {
-      name: '',
-      location: '',
+      items:[],
+      id:'',
+      name:'',
+      location:'',
       review:''
     }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleUpdate = this.handleUpdate.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  onChangeItemName(e) {
-    this.setState({name: e.target.value})
+  componentDidMount(){
+    axios.get('http://test.gth.intern.com/api/items')
+    .then(res => {
+      this.setState({
+        items: res.data.data
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
-  onChangeItemLocation(e) {
-    this.setState({location: e.target.value})
+  handleChange(e){
+    this.setState({
+      [e.target.name]: e.target.value
+    })
   }
 
-  onChangeItemReview(e) {
-    this.setState({review: e.target.value})
+  handleSubmit(e){
+    e.preventDefault();
+
+    if(this.state.id !== ''){
+      return this.updateItem();
   }
+
+  const item = {
+    name: this.state.name,
+    location: this.state.location,
+    review: this.state.review
+  };
+
+  axios.post('http://test.gth.intern.com/api/items/', item)
+    .then(res => {
+      console.log(res.data)
+      window.location.reload();
+  });
+
+  this.setState({id:'', name:'', location:'', review:''})
+  }
+
+  handleUpdate = (id = null , name = null , location = null ,  review = null) => {
+    this.setState({id, name, location, review})
+  }
+
+  updateItem(){
+    var item = { name:this.state.name, location:this.state.location, review:this.state.review}
+    axios.put('http://test.gth.intern.com/api/items/' + this.state.id, item)
+      .then((res) => {
+        console.log('Item removed deleted!')
+        window.location.reload();
+      }).catch((error) => {
+        console.log(error)
+      })
+
+  this.setState({
+    id:'',
+    name:'',
+    location:'',
+    review:''
+  })
 }
 
-function App() {
-  return (
+removeItem(itemId){
+  axios.delete('http://test.gth.intern.com/api/items/' + itemId)
+    .then((res) => {
+      console.log('Item remove deleted!')
+      window.location.reload();
+    }).catch((error) => {
+      console.log(error)
+    })
+  
+}
+
+render(){
+return (
     <div className="App">
+      <div className="jumbotron">
+      
+      <h1>My page : Update Patch Game </h1>
+
+
+      </div>
+
       <nav>
-      <span>My page : Update Patch Game </span>
+        <span>Add your information about patch game:</span>
       </nav>
-      <div>
   
   
-    <form>
-    <label for="fname">Patch:</label>
-    <input type="text" id="fname" name="firstname" placeholder="Enter your patch version .."></input>
+    <form onSubmit={this.handleSubmit}>
 
-    <label for="lname">Game:</label>
-    <input type="text" id="lname" name="lastname" placeholder="Enter your game .."></input>
+    <div className="form-group">
+    <label>Patch:</label>
+    <input 
+      type="text" 
+      name="name" 
+      value={this.state.name}
+      onChange={this.handleChange}
+      />
+    </div>
+
+    <div className="form-group">
+    <label>Game:</label>
+    <input 
+      type="text" 
+      name="location" 
+      value={this.state.location}
+      onChange={this.handleChange}
+      />
+    </div>
    
-  
-    <label for="lname">Description:</label>
-    <input type="text" id="lname" name="lastname" placeholder="Enter your description .."></input>
+    <div className="form-group">
+    <label>Description:</label>
+    <textarea 
+      type="text" 
+      name="review" 
+      value={this.state.review}
+      onChange={this.handleChange}
+      >
+      </textarea>
+    </div>
+    
 
-    <button class="button button1">Submit</button>
+    <div className="button button1">
+      <button className="Submit"
+      >Submit</button>
+    </div>
+
     </form>
 
-   
-    <div class="footer">
-  <p></p>
-
-   <h2>Patch Game :</h2>
-  <p1>Information for all patch game , you can find detail about patch game that you want! </p1>  
-</div>
+    <br></br>
 
 
-  <body>
-  <table id="customers">
-  <tr>
-    <th>Patch version</th>
-    <th>Game</th>
-    <th>Description</th>
-    <th>Edit</th>
-    <th>Delete</th>
-  </tr>
 
+  <nav>
+    <span>Update Patch game:</span>
+  </nav>
 
-<tbody>
-<tr>
-    <td>1.5</td>
-    <td>Genshin Impact</td>
-    <td>banner Zhongli rerun and new banner Eula</td>
-        <td><button type="button" class="btn btn-warning active">edit</button></td>
-        <td><button type="button" class="btn btn-danger active">delete</button></td>
-</tr>
-</tbody>
-</table>
-</body>
-</div>
+  <br></br>
 
-   </div>
-   
+  <table>
+    <tr>
+      <th width="25%">Patch version</th>
+      <th width="25%">Game</th>
+      <th width="25%">Description</th>
+      <th width="25%">Edit</th>
+      <th width="25%">Delete</th>
+    </tr>
 
-  );
+{
+  this.state.items.map((item) => {
+    return (
+      <tr>
+        <td>{item.name}</td>
+        <td>{item.location}</td>
+        <td>{item.review}</td>
+
+        <td><button
+          className="edit"
+          onClick={() => this.handleUpdate(item.id,item.name,item.location,item.review)}
+          >
+            Edit
+          </button>
+          </td>
+
+        <td><button
+          className="delete"
+          onClick={() => this.removeItem(item.id)}
+          >
+            Delete            
+          </button>
+        </td>
+        </tr>
+    )
+        })
 }
-
+      
+    </table>
+    </div>
+    );
+    }
+    }
 export default App;
+  
