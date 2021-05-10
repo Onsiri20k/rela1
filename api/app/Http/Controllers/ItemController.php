@@ -16,14 +16,14 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'location' => 'required',
-            'review' => 'required',
+            'pat' => 'required',
+            'game' => 'required',
+            'desc' => 'required',
         ]);
         $item = new Item([
-            'name' => $request->name,
-            'location' => $request->location,
-            'review' => $request->review,
+            'pat' => $request->pat,
+            'game' => $request->game,
+            'desc' => $request->desc,
         ]);
         $item->save();
         return response()->json([
@@ -39,14 +39,14 @@ class ItemController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
-            'location' => 'required',
-            'review' => 'required',
+            'pat' => 'required',
+            'game' => 'required',
+            'desc' => 'required',
         ]);
         $item = Item::findOrFail($id);
-        $item->name = $request->name;
-        $item->location = $request->location;
-        $item->review = $request->review;
+        $item->pat = $request->pat;
+        $item->game = $request->game;
+        $item->desc = $request->desc;
         $item->save();
 
         return response()->json([

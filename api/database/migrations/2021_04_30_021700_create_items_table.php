@@ -15,9 +15,9 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->text('name');
-            $table->text('location');
-            $table->text('review');
+            $table->text('pat');
+            $table->text('game');
+            $table->text('desc');
             $table->timestamps();
         });
     }

@@ -10,9 +10,9 @@ class App extends Component {
     this.state = {
       items:[],
       id:'',
-      name:'',
-      location:'',
-      review:''
+      pat:'',
+      game:'',
+      desc:''
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -46,9 +46,9 @@ class App extends Component {
   }
 
   const item = {
-    name: this.state.name,
-    location: this.state.location,
-    review: this.state.review
+    pat: this.state.pat,
+    game: this.state.game,
+    desc: this.state.desc
   };
 
   axios.post('http://test.gth.intern.com/api/items/', item)
@@ -57,15 +57,15 @@ class App extends Component {
       window.location.reload();
   });
 
-  this.setState({id:'', name:'', location:'', review:''})
+  this.setState({id:'', pat:'', game:'', desc:''})
   }
 
-  handleUpdate = (id = null , name = null , location = null ,  review = null) => {
-    this.setState({id, name, location, review})
+  handleUpdate = (id = null , pat = null , game = null ,  desc = null) => {
+    this.setState({id, pat, game, desc})
   }
 
   updateItem(){
-    var item = { name:this.state.name, location:this.state.location, review:this.state.review}
+    var item = { pat:this.state.pat, game:this.state.game, desc:this.state.desc}
     axios.put('http://test.gth.intern.com/api/items/' + this.state.id, item)
       .then((res) => {
         console.log('Item removed deleted!')
@@ -76,9 +76,9 @@ class App extends Component {
 
   this.setState({
     id:'',
-    name:'',
-    location:'',
-    review:''
+    pat:'',
+    game:'',
+    desc:''
   })
 }
 
@@ -114,8 +114,8 @@ return (
     <label>Patch:</label>
     <input 
       type="text" 
-      name="name" 
-      value={this.state.name}
+      name="pat" 
+      value={this.state.pat}
       onChange={this.handleChange}
       />
     </div>
@@ -124,8 +124,8 @@ return (
     <label>Game:</label>
     <input 
       type="text" 
-      name="location" 
-      value={this.state.location}
+      name="game" 
+      value={this.state.game}
       onChange={this.handleChange}
       />
     </div>
@@ -134,8 +134,8 @@ return (
     <label>Description:</label>
     <textarea 
       type="text" 
-      name="review" 
-      value={this.state.review}
+      name="desc" 
+      value={this.state.desc}
       onChange={this.handleChange}
       >
       </textarea>
@@ -172,13 +172,13 @@ return (
   this.state.items.map((item) => {
     return (
       <tr>
-        <td>{item.name}</td>
-        <td>{item.location}</td>
-        <td>{item.review}</td>
+        <td>{item.pat}</td>
+        <td>{item.game}</td>
+        <td>{item.desc}</td>
 
         <td><button
           className="edit"
-          onClick={() => this.handleUpdate(item.id,item.name,item.location,item.review)}
+          onClick={() => this.handleUpdate(item.id,item.pat,item.game,item.desc)}
           >
             Edit
           </button>
